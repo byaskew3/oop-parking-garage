@@ -4,18 +4,20 @@ import time
 class ParkingGarage:
 
     # constructor function
-    def __init__(self, tickets = random.sample(range(50), 10), parkingSpaces = random.sample(range(50), 10), currentTicket = {}):
+    def __init__(self, enteredGarage = False, tickets = random.sample(range(50), 10), parkingSpaces = random.sample(range(50), 10), currentTicket = {}):
+        self.enteredGarage = enteredGarage
         self.tickets = tickets
         self.parkingSpaces = parkingSpaces
         self.currentTicket = currentTicket
     
     # methods
     def takeTicket(self):
+        self.enteredGarage = True;
         if (len(self.tickets) > 0):
             newTicket = self.tickets.pop()
             newParking = self.parkingSpaces.pop()
             print(f'Your ticket number is #{newTicket}, please park at Parking Space #{newParking}!')
-            self.currentTicket[newTicket] = False
+            self.currentTicket[newTicket] = 'false'
         else:
             print("Sorry we're full!")
     
@@ -28,7 +30,7 @@ class ParkingGarage:
             if (paidTicket.lower() == 'pay'):
                 self.tickets.append(ticketNum)
                 self.parkingSpaces.append(ticketNum)
-                self.currentTicket[ticketNum] = True
+                self.currentTicket[ticketNum] = 'true'
             else:
                 print('Payment declined, please use another form of payment!')
                 self.payForParking()
@@ -38,9 +40,16 @@ class ParkingGarage:
     
 
     def leaveGarage(self):
-        print('Verifying that your ticket is paid for...')
-        time.sleep(2)
-        print('Thank you, have a nice day!')
+        if (self.enteredGarage):
+            print('Verifying that your ticket is paid for...')
+            time.sleep(2)
+            for value in self.currentTicket.values():
+                if (value == 'false'):
+                    print("You haven't paid for your ticket yet!")
+                else:
+                    print('Thank you, have a nice day!😀')
+        else:
+            print('You need to enter the garage first...🤔')
 
 christianGarage = ParkingGarage()
 
